@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+out/
+*.wav
+*.ckpt
+# Cavern binaries are not redistributed here - drop them next to tool/ec3_to_adm.exe
+tool/Cavern.dll
+tool/Cavern.Format.dll
+tool/netstandard.dll
