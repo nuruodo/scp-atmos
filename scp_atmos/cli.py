@@ -1,9 +1,9 @@
 """Command line / Python entry points.
 
-  python -m jocsfx probe  FILE [--track 0]
-  python -m jocsfx run    FILE --mode fx|dialogue|both --out OUT  (--start S --end E | --segments FILE | --chunk SECONDS)
+  python -m scp_atmos probe  FILE [--track 0]
+  python -m scp_atmos run    FILE --mode fx|dialogue|both --out OUT  (--start S --end E | --segments FILE | --chunk SECONDS)
                           [--track 0] [--clean-adm] [--keep-work] [--fast] [--device auto|cuda|cpu|mps]
-                          --bandit-repo DIR --bandit-ckpt FILE      (or env JOCSFX_BANDIT_REPO / JOCSFX_BANDIT_CKPT)
+                          --bandit-repo DIR --bandit-ckpt FILE      (or env SCP_ATMOS_BANDIT_REPO / SCP_ATMOS_BANDIT_CKPT)
 
 Segments file: JSON  [{"name": "shot_001", "start": 158.4, "end": 162.3}, ...]   or CSV  name,start,end
 Times are seconds or HH:MM:SS(.fff).
@@ -90,7 +90,7 @@ def run_segments(src, segments, out_dir, mode="fx", track=0, cfg=None, clean=Fal
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="jocsfx")
+    ap = argparse.ArgumentParser(prog="scp-atmos")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("probe")
     p.add_argument("file"); p.add_argument("--track", type=int, default=0)
@@ -105,10 +105,10 @@ def main(argv=None):
     r.add_argument("--keep-work", action="store_true"); r.add_argument("--fast", action="store_true")
     r.add_argument("--device", default="auto")
     r.add_argument("--presentation", type=int, default=3)
-    r.add_argument("--bandit-repo", default=os.environ.get("JOCSFX_BANDIT_REPO", ""))
-    r.add_argument("--bandit-ckpt", default=os.environ.get("JOCSFX_BANDIT_CKPT", ""))
-    r.add_argument("--truehdd", default=os.environ.get("JOCSFX_TRUEHDD", "truehdd"))
-    r.add_argument("--tool-dir", default=os.environ.get("JOCSFX_TOOL_DIR", Config.tool_dir))
+    r.add_argument("--bandit-repo", default=os.environ.get("SCP_ATMOS_BANDIT_REPO", ""))
+    r.add_argument("--bandit-ckpt", default=os.environ.get("SCP_ATMOS_BANDIT_CKPT", ""))
+    r.add_argument("--truehdd", default=os.environ.get("SCP_ATMOS_TRUEHDD", "truehdd"))
+    r.add_argument("--tool-dir", default=os.environ.get("SCP_ATMOS_TOOL_DIR", Config.tool_dir))
     a = ap.parse_args(argv)
     cfg = Config()
     if a.cmd == "probe":

@@ -1,4 +1,4 @@
-# jocsfx - Atmos object extraction + FX / dialogue / both stems
+# scp-atmos - Atmos object extraction + FX / dialogue / both stems
 
 Takes any **Dolby Digital Plus (E-AC-3) JOC** or **Dolby TrueHD Atmos** audio track, pulls out the Atmos
 objects, and builds a clean stereo stem for any time range ("scene"/"shot"), in one of three modes:
@@ -44,8 +44,8 @@ being smeared by the separator.
    want to rebuild it. It reads E-AC-3 JOC and the `.atmos` sets written by truehdd.
 4. **truehdd** (https://github.com/truehdd/truehdd) - only for TrueHD tracks. Pass `--truehdd /path/to/truehdd`.
 5. **Bandit-v2**: clone https://github.com/kwatcharasupat/bandit-v2 and download `checkpoint-multi.ckpt` from
-   https://zenodo.org/records/12701995. Pass `--bandit-repo` / `--bandit-ckpt` (or env `JOCSFX_BANDIT_REPO`,
-   `JOCSFX_BANDIT_CKPT`). torchaudio / pytorch_lightning are NOT needed (shimmed).
+   https://zenodo.org/records/12701995. Pass `--bandit-repo` / `--bandit-ckpt` (or env `SCP_ATMOS_BANDIT_REPO`,
+   `SCP_ATMOS_BANDIT_CKPT`). torchaudio / pytorch_lightning are NOT needed (shimmed).
 6. Python 3.10+, `pip install -r requirements.txt` (numpy, soundfile, torch). CUDA is used when available; on a Mac use
    `--device mps` with `PYTORCH_ENABLE_MPS_FALLBACK=1` (not verified) or CPU.
 
@@ -57,17 +57,17 @@ being smeared by the separator.
 ## Usage
 
 ```bash
-python -m jocsfx probe  movie.mkv
-python -m jocsfx run movie.mkv --mode both --start 00:02:39.4 --end 00:02:41.3 --out out/
-python -m jocsfx run movie.mkv --mode fx   --segments scenes.json --out out/
-python -m jocsfx run movie.mkv --mode dialogue --chunk 120 --out out/        # whole film in 2 min pieces
+python -m scp_atmos probe  movie.mkv
+python -m scp_atmos run movie.mkv --mode both --start 00:02:39.4 --end 00:02:41.3 --out out/
+python -m scp_atmos run movie.mkv --mode fx   --segments scenes.json --out out/
+python -m scp_atmos run movie.mkv --mode dialogue --chunk 120 --out out/        # whole film in 2 min pieces
 ```
 
 `scenes.json`: `[{"name":"scene_001","start":158.4,"end":162.3}, ...]` (CSV `name,start,end` also works; seconds or `HH:MM:SS.fff`).
 Other flags: `--track N` (audio track index), `--clean-adm`, `--fast` (skip the 5.1 fallback separation: fewer Bandit passes, so faster; the fallback then only triggers if the object route is essentially silent),
 `--keep-work` (keep cut/ADM/ref files), `--device`.
 
-Python API: `from jocsfx.cli import run_segments; from jocsfx.extract import Config` - `run_segments(src, segments, out_dir, mode, track, cfg)`.
+Python API: `from scp_atmos.cli import run_segments; from scp_atmos.extract import Config` - `run_segments(src, segments, out_dir, mode, track, cfg)`.
 
 ## Notes for integrating into an app
 
